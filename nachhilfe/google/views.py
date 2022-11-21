@@ -5,10 +5,12 @@ import json
 
 def index(request):
     json_data = json.loads(request.body)
-    article = json_data['article']
-    price = json_data['price']
+    name = json_data['name']
+    mail = json_data['mail']
     street = json_data['street']
     houseNr = json_data['houseNr']
     zipCode = json_data['zipCode']
     city = json_data['city']
+    article = json_data['article']
+    price = json_data['price']
     return HttpResponse(json_data['street'])
