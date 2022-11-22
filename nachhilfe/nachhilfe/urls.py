@@ -19,5 +19,5 @@ from django.conf.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('google/', include('google.urls')),
+    path('billing/', include('google.urls')),
 ]
