@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseServerError
 from django.core.mail import send_mail
 from django.conf import settings
 from django.http import FileResponse
+from django.template.loader import render_to_string
 from reportlab.pdfgen import canvas
 import json
 from PIL import Image
@@ -17,14 +18,14 @@ def index(request):
     name = json_data['name']
     mail = json_data['mail']
     street = json_data['street']
-    houseNr = json_data['houseNr']
+    houseNr = json_data['houseNr'] 
     zipCode = json_data['zipCode']
     city = json_data['city']
     article = json_data['article']
     price = json_data['price']
 
     subject = "Rechnung und Buchungsbestätigung"
-    message = "Vielen Dank für die Buchung von: "+article+" zum Preis von "+price+"€."
+    message = render_to_string("mail.html")
     email = EmailMessage(subject, message, settings.EMAIL_HOST_USER, [mail])
     pdf = createPDF(name, mail, street+" "+houseNr+", "+zipCode+" "+city, article, price)
     email.attach('Rechnung.pdf', pdf, 'application/pdf')
