@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseServerError
+from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
@@ -13,8 +13,9 @@ from reportlab.lib.pagesizes import letter, A4
 from django.core.mail import EmailMessage
 from django.utils.html import strip_tags
 import reportlab
+from django.views.decorators.csrf import csrf_exempt
 
-
+@csrf_exempt
 def index(request):
     json_data = json.loads(request.body)
     name = json_data['name']
@@ -35,9 +36,11 @@ def index(request):
     email.attach_alternative(message, "text/html")
     try: 
         email.send(fail_silently=False)
-        return HttpResponse("Email gesendet")
+        response = {'message': 'Email sent'}
+        return JsonResponse(response)
     except:
-        return HttpResponseServerError("Email nicht gesendet")
+        response = {'message': 'Email not sent'}
+        return JsonResponse(response)
 
 def createPDF(name, mail, address, article, price):
    
