@@ -20,18 +20,15 @@ def index(request):
     json_data = json.loads(request.body)
     name = json_data['name']
     mail = json_data['mail']
-    street = json_data['street']
-    houseNr = json_data['houseNr'] 
-    zipCode = json_data['zipCode']
-    city = json_data['city']
+    address = json_data['address']
     article = json_data['article']
     price = json_data['price']
 
     subject = "Rechnung und Buchungsbestätigung"
-    message = '<html>    <head>    </head>    <body style="background-color: rgb(27, 27, 27);">         <img style="display: block;        margin-left: auto;        margin-right: auto;        max-width: 30%;        height: auto;" src="https://github.com/DrBackmischung/Kino-Dokumentation/blob/main/Kinovation.png?raw=true">        <h1 style="color: rgb(136, 71, 25);        text-align: center;        font-family: Arial, Helvetica, sans-serif;">Buchung abgeschlossen!</h1>        <h3 style="color: rgb(255, 255, 255);        text-align: center;        font-family: Arial, Helvetica, sans-serif;">Danke f&uuml;r deine Buchung, N-NAME! Deine Buchung f&uuml;r N-ARTIKEL wird hiermit best&auml;tigt.</h3>        <p style="color: rgb(255, 255, 255);        text-align: center;        font-family: Arial, Helvetica, sans-serif;">Name: N-NAME<br>Leistung: N-ANZAHL x N-ARTIKEL zu je N-PREIS (Gesamt: N-GESAMT)</p>        <p style="color: rgb(255, 255, 255);        text-align: center;        font-family: Arial, Helvetica, sans-serif;">Im Anhang findest du die Bestätigung/Rechnung.</p>        <img style="        display: block;        margin-left: auto;        margin-right: auto;        max-width: 3%;        height: auto;" src="https://github.com/DrBackmischung/Kino-Dokumentation/blob/main/KV.png?raw=true">        <p style="        color: rgb(114, 114, 114);        text-align: center;        font-family: Arial, Helvetica, sans-serif;        font-size: xx-small;"><a class="footer" href="https://kino-frontend.vercel.app/impressum">Impressum</a> <a class="footer" href="https://kino-frontend.vercel.app/">Homepage</a> <a class="footer" href="https://kino-frontend.vercel.app/agbs">AGB</a></p>    </body></html>'
+    message = '<html>    <head>    </head>    <body style="background-color: rgb(27, 27, 27);">          <h1 style="color: rgb(136, 71, 25);        text-align: center;        font-family: Arial, Helvetica, sans-serif;">Buchung abgeschlossen!</h1>        <h3 style="color: rgb(255, 255, 255);        text-align: center;        font-family: Arial, Helvetica, sans-serif;">Danke f&uuml;r deine Buchung!</h3>         <p style="color: rgb(255, 255, 255);        text-align: center;        font-family: Arial, Helvetica, sans-serif;">Im Anhang findest du die Bestätigung/Rechnung.</p>        </body></html>'
     # message = render_to_string("https://raw.githubusercontent.com/DrBackmischung/Nachhilfe-Email/main/mail.html")
     email = EmailMultiAlternatives(subject, strip_tags(message), settings.EMAIL_HOST_USER, [mail])
-    pdf = createPDF(name, mail, street+" "+houseNr+", "+zipCode+" "+city, article, price)
+    pdf = createPDF(name, mail, address, article, price)
     email.attach('Rechnung.pdf', pdf, 'application/pdf')
     email.attach_alternative(message, "text/html")
     try: 
